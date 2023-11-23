@@ -343,11 +343,15 @@ public class Team {
                     "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠻⣿⣿⣿⢃⣶⠮⣿⡏⡍⢿⣯⢉⢻⢡⢸⣿⣿⣿⠿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n" +
                     "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠛⠳⠭⣤⣿⣴⣶⣼⣿⣬⣦⠾⠖⠛⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n";
 
-    String[] TEAMS = {DK, KT, T1, GEN, JDG, BLG, LNG, WBG, G2, FNC, NRG, TL, GAM, C9, BDS, MAD};
-
+    String[] TEAMS = {GEN, T1, KT, DK, JDG, BLG, LNG, WBG, G2, FNC, MAD, BDS, NRG, C9, TL, GAM};
+    String[] TEAM_VAL = {"GEN", "T1", "KT", "DK", "JDG", "BLG", "LNG", "WBG", "G2", "FNC", "MAD", "BDS", "NRG", "C9", "TL", "GAM"};
     public void printTeam(int i)
     {
         System.out.println(TEAMS[i]);
+    }
+
+    public String getTEAM_VAL(int i) {
+        return TEAM_VAL[i];
     }
 
     public void printDK() {
