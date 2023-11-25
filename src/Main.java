@@ -4,13 +4,15 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws SQLException {
 
-        Scanner scanner = new Scanner(System.in);
+            Scanner scanner = new Scanner(System.in);
+//
+//        String url = "jdbc:mysql://192.168.56.102:4567/madang";
+//        String username = "root";
+//        String password = "1234";
 
-        String url = "jdbc:mysql://192.168.56.102:4567/madang";
-        String username = "root";
-        String password = "1234";
+        //Connection con = DriverManager.getConnection(url, username, password) 나중에 try 안에 넣기
 
-        try (Connection con = DriverManager.getConnection(url, username, password)) {
+        try {
             String asciiArt =
                     "   ___           ___           ___           ___           ___           ___     \n" +
                             "/\\ \\  __/\\ \\   /\\  __`\\    /\\  _`\\     /\\ \\       /\\  _`\\    /\\  _`\\     \n" +
@@ -230,10 +232,12 @@ public class Main {
             //대진표 출력
             for(int i = 0; i < bracket.length; i++)
             {
-                String text10 = "매치 " + (i+1) + " : " + team.getTEAM_VAL(bracket[i][0]) + " vs " + team.getTEAM_VAL(bracket[i][1]);
+                String text10 = "매치 " + (i+1) + " : " + team.getTEAM_VAL(bracket[i][0]) + " vs " + team.getTEAM_VAL(bracket[i][1]) + "\n";
                 texttyping.changeText(text10);
                 texttyping.start();
             }
+
+
 
             scanner.close();
 
