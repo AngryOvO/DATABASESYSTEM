@@ -5,14 +5,14 @@ public class Main {
     public static void main(String[] args) throws SQLException {
 
             Scanner scanner = new Scanner(System.in);
-//
-//        String url = "jdbc:mysql://192.168.56.102:4567/madang";
-//        String username = "root";
-//        String password = "1234";
 
-        //Connection con = DriverManager.getConnection(url, username, password) 나중에 try 안에 넣기
+        String url = "jdbc:mysql://192.168.56.102:4567/WORDS";
+        String username = "root";
+        String password = "1234";
 
-        try {
+
+
+        try(Connection con = DriverManager.getConnection(url, username, password)) {
             String asciiArt =
                     "   ___           ___           ___           ___           ___           ___     \n" +
                             "/\\ \\  __/\\ \\   /\\  __`\\    /\\  _`\\     /\\ \\       /\\  _`\\    /\\  _`\\     \n" +

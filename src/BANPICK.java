@@ -1,3 +1,4 @@
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -8,6 +9,9 @@ public class BANPICK {
     private ArrayList<String> RedBanlist;
     private ArrayList<String> BluePicklist;
     private ArrayList<String> RedPicklist;
+
+
+
 
 
     public void start(String team1, String team2)
@@ -280,6 +284,17 @@ public class BANPICK {
     }
     public void showchampionlist()
     {
+        DBConnect dbConnect = new DBConnect();
+
+        String url = "jdbc:mysql://192.168.56.102:4567/WORDS";
+        String username = "root";
+        String password = "1234";
+
+        dbConnect.connect(url, username, password);
+
+        String query = "SELECT * FROM CHAMPION";
+        ResultSet resultSet = dbConnect.getResult(query);
+        System.out.println(resultSet);
 
     }
 
