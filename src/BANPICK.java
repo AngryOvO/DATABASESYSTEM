@@ -284,30 +284,13 @@ public class BANPICK {
     }
     public void showchampionlist()
     {
-        DBConnect dbConnect = new DBConnect();
 
-        String url = "jdbc:mysql://192.168.56.102:4567/WORDS";
-        String username = "root";
-        String password = "1234";
-
-        dbConnect.connect(url, username, password);
-
-        String query = "SELECT * FROM CHAMPION";
-        ResultSet resultSet = dbConnect.getResult(query);
-        System.out.println(resultSet);
 
     }
 
     public void ban(String pickchampion, int team)
     {
-        if(team == 1)
-        {
-            BlueBanlist.add(pickchampion);
-        }
-        else if(team == 2)
-        {
-            RedBanlist.add(pickchampion);
-        }
+
     }
 
     public void pick()
