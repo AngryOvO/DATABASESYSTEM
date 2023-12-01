@@ -1,17 +1,66 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
+import java.sql.*;
+
 
 public class BANPICK {
 
-
-
-
-
-
-    public void start(String team1, String team2)
+    static class Champion
     {
+        String championname;
+        String position;
+
+        public Champion(String a, String b)
+        {
+            this.championname = a;
+            this.position = b;
+        }
+
+        public String getchampionname()
+        {
+            return championname;
+        }
+        public String getPosition()
+        {
+            return position;
+        }
+    }
+
+    Connection con;
+    Map<Champion, Boolean> championlist =  new HashMap<>();
+
+
+
+
+
+
+    public void DBConnect() throws SQLException {
+        String url = "jdbc:mysql://192.168.56.102:4567/WORDS";
+        String username = "root";
+        String password = "1234";
+
+
+        con = DriverManager.getConnection(url, username, password);
+    }
+
+    public void setChampionList() throws SQLException
+    {
+        String query = "SELECT championname, position FROM CHAMPION;";
+        Statement statement = con.createStatement();
+        ResultSet resultSet = statement.executeQuery(query);
+
+        resultSet.next();
+        while(resultSet.next())
+        {
+            championlist.put(new Champion(resultSet.getString("championname"),resultSet.getString("position") ), false);
+        }
+    }
+
+    public void start(String team1, String team2) throws SQLException {
         Scanner scanner = new Scanner(System.in);
+        setChampionList();
         // 블루팀 레드팀 선정
         String text1 = "블루 팀과 레드 팀을 무작위로 선정합니다.";
         texttyping texttyping = new texttyping(text1);
@@ -279,7 +328,12 @@ public class BANPICK {
     }
     public void showchampionlist()
     {
+        Iterator it = championlist.entrySet().iterator();
 
+        while(it.hasNext())
+        {
+            if(championlist.get)
+        }
 
     }
 
