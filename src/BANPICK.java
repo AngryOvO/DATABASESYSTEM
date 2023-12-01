@@ -4,11 +4,6 @@ import java.util.Scanner;
 
 public class BANPICK {
 
-    private ArrayList<String> championlist;
-    private ArrayList<String> BlueBanlist;
-    private ArrayList<String> RedBanlist;
-    private ArrayList<String> BluePicklist;
-    private ArrayList<String> RedPicklist;
 
 
 
