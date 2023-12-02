@@ -1,8 +1,13 @@
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Scanner;
+
 
 public class Main {
     public static void main(String[] args) throws SQLException {
+
 
         Scanner scanner = new Scanner(System.in);
 
@@ -29,7 +34,7 @@ public class Main {
             while(true)
             {
                 //메인 메뉴
-                String text1 = "1. 게임 시작\n2. 팀 목록 보기\n3. 챔피언 목록 보기\n4. 종료\n";
+                String text1 = "1. 게임 시작\n2. 팀 목록 보기\n3. 챔피언 목록 보기\n4. 설정\n5. 종료\n";
                 texttyping texttyping = new texttyping(text1);
                 texttyping.start();
 
@@ -75,7 +80,7 @@ public class Main {
                             currentImageIndex = (currentImageIndex - 1 + team.TEAMS.length) % team.TEAMS.length;
                         } else if (input2.equalsIgnoreCase("3")) {
                             player1teamindex = currentImageIndex;
-                            PLAYER player1 = new PLAYER(name, team.TEAM_VAL[currentImageIndex]);
+                            PLAYER player1 = new PLAYER(name, team.TEAM_VAL[currentImageIndex] , currentImageIndex);
                             break;
                         } else {
                             System.out.println("잘못된 입력입니다. 방향키(← or →) 또는 Enter를 눌러주세요.");
@@ -125,7 +130,7 @@ public class Main {
                             }
                             else
                             {
-                                PLAYER player2 = new PLAYER(name2, team.TEAM_VAL[currentImageIndex2]);
+                                PLAYER player2 = new PLAYER(name2, team.TEAM_VAL[currentImageIndex2] , currentImageIndex2);
                                 break;
                             }
 
@@ -150,7 +155,7 @@ public class Main {
                     texttyping.changeText(commentator);
                     texttyping.start();
 
-                    String worldChampionship = "나레이션:\n\"이곳은 '월드 챔피언십'의 결승전 현장입니다. 이곳에서 우리는 히어로들의 충돌과 전쟁을 목격하게 될 것입니다. 그리고 이 모든 것은 여러분의 손에 달렸습니다.\"\n\n";
+                    String worldChampionship = "나레이션:\n\"이곳은 '월드 챔피언십'의 현장입니다. 이곳에서 우리는 히어로들의 충돌과 전쟁을 목격하게 될 것입니다. 그리고 이 모든 것은 여러분의 손에 달렸습니다.\"\n\n";
                     texttyping.changeText(worldChampionship);
                     texttyping.start();
 
@@ -188,46 +193,15 @@ public class Main {
                     texttyping.changeText(text9);
                     texttyping.start();
 
-                    int[] seed1 = {0,4,8,12};
-                    int[] seed2 = {1,5,9,13};
-                    int[] seed3 = {2,6,10,14};
-                    int[] seed4 = {3,7,11,15};
+                    int[] seed1 = {1,5,9,13};
+                    int[] seed2 = {2,6,10,14};
+                    int[] seed3 = {3,7,11,15};
+                    int[] seed4 = {4,8,12,16};
 
-                    //seed1 suffle
-                    for(int i = 0; i < seed1.length; i++)
-                    {
-                        int random = (int)(Math.random() * seed1.length);
-                        int temp = seed1[i];
-                        seed1[i] = seed1[random];
-                        seed1[random] = temp;
-                    }
-
-                    //seed2 suffle
-                    for(int i = 0; i < seed2.length; i++)
-                    {
-                        int random = (int)(Math.random() * seed2.length);
-                        int temp = seed2[i];
-                        seed2[i] = seed2[random];
-                        seed2[random] = temp;
-                    }
-
-                    //seed3 suffle
-                    for(int i = 0; i < seed3.length; i++)
-                    {
-                        int random = (int)(Math.random() * seed3.length);
-                        int temp = seed3[i];
-                        seed3[i] = seed3[random];
-                        seed3[random] = temp;
-                    }
-
-                    //seed4 suffle
-                    for(int i = 0; i < seed4.length; i++)
-                    {
-                        int random = (int)(Math.random() * seed4.length);
-                        int temp = seed4[i];
-                        seed4[i] = seed4[random];
-                        seed4[random] = temp;
-                    }
+                    shuffleArray(seed1);
+                    shuffleArray(seed2);
+                    shuffleArray(seed3);
+                    shuffleArray(seed4);
 
                     // 1번 시드와 4번시드에서 한 팀 씩 뽑아 매칭
                     int[] match1 = {seed1[0], seed4[0]};
@@ -248,6 +222,62 @@ public class Main {
                         texttyping.changeText(text10);
                         texttyping.start();
                     }
+
+                    for(int i = 0; i <1 ; i++) //bracket.length
+                    {
+                        Integer a = i+1;
+
+                        String text11 = "\n" + a.toString() + "번 경기.\n";
+                        texttyping.changeText(text11);
+                        texttyping.start();
+
+                        String text12 = team.getTEAM_VAL(bracket[i][0]) + " vs " + team.getTEAM_VAL(bracket[i][1]) + "\n";
+                        texttyping.changeText(text12);
+                        texttyping.start();
+                        System.out.println(bracket[i][0] + " vs " + bracket[i][1]);
+
+                        LocalDate date = LocalDate.now();
+                        //date to string
+                        String date2 = date.toString();
+                        String query = "INSERT INTO GAMERESULT (resultnum, gamedate, firstteamid, secondteamid) VALUES (?, ?, ?, ?)";
+                        Statement statement = con.createStatement();
+                        PreparedStatement preparedStatement = con.prepareStatement(query);
+                        preparedStatement.setInt(1, i+1);
+                        preparedStatement.setString(2, date2);
+                        preparedStatement.setInt(3, bracket[i][0]);
+                        preparedStatement.setInt(4, bracket[i][1]);
+                        preparedStatement.executeUpdate();
+
+                        String query2 = "INSERT INTO MATCHING (matchnum, resultid) VALUE (?,?)";
+                        Statement statement2 = con.createStatement();
+                        PreparedStatement preparedStatement2 = con.prepareStatement(query2);
+                        preparedStatement2.setInt(1, i+1);
+                        preparedStatement2.setInt(2, i+1);
+                        preparedStatement2.executeUpdate();
+
+                        BANPICK banpick = new BANPICK();
+                        banpick.start(bracket[i][0], bracket[i][1], a);
+                        String query4 = "UPDATE MATCHING SET setwinteamid = ? WHERE (matchnum = " + a.toString() +");";
+                        Statement statement4 = con.createStatement();
+                        PreparedStatement preparedStatement4 = con.prepareStatement(query4);
+                        preparedStatement4.setInt(1, banpick.getWinnerteam());
+                        preparedStatement4.executeUpdate();
+
+
+                        String query3 = "UPDATE GAMERESULT SET winnerid = ? WHERE (resultnum = " + a.toString() +");";
+                        Statement statement3 = con.createStatement();
+                        PreparedStatement preparedStatement3 = con.prepareStatement(query3);
+                        preparedStatement3.setInt(1, banpick.getWinnerteam());
+                        preparedStatement3.executeUpdate();
+
+
+                    }
+
+
+
+
+
+
                 }
                 else if(input.equalsIgnoreCase("2"))
                 {
@@ -389,8 +419,36 @@ public class Main {
                 }
                 else if(input.equalsIgnoreCase("4"))
                 {
+                    //팀 정보 수정 또는 챔피언 정보 수정
+                    String text13 = "1. 팀 정보 수정\n2. 챔피언 정보 수정\n3. 선수 번호 수정\n4. 이전으로 돌아가기\n";
+                    texttyping.changeText(text13);
+                    texttyping.start();
+
+                    System.out.print("입력 : ");
+                    String input2 = scanner.nextLine();
+
+
+                    if(input2.equalsIgnoreCase("1"))
+                    {
+                        UpdateTeamInfo updateTeamInfo = new UpdateTeamInfo();
+                    }
+                    else if(input2.equalsIgnoreCase("2"))
+                    {
+                        UpdateChampionInfo updateChampionInfo = new UpdateChampionInfo();
+                    }
+                    else if(input2.equalsIgnoreCase("3"))
+                    {
+                        UpdatePlayerInfo updatePlayerInfo = new UpdatePlayerInfo();
+                    }
+                    else
+                    {
+                        System.out.println("잘못된 입력입니다.\n");
+                    }
+                }
+                else if (input.equalsIgnoreCase("5"))
+                {
                     System.out.println("게임을 종료합니다.");
-                    System.exit(0);
+                    break;
                 }
                 else
                 {
@@ -399,15 +457,162 @@ public class Main {
 
             }
 
-
-
-
-
-
-
-
         } catch (Exception e) {
             System.out.println(e);
+        }
+
+
+    }
+
+    public static void shuffleArray(int[] array) {
+        Collections.shuffle(Arrays.asList(array));
+    }
+
+    static class UpdateTeamInfo {
+        public UpdateTeamInfo() {
+            try {
+                // MySQL 연결
+                Connection conn = DriverManager.getConnection("jdbc:mysql://192.168.56.102:4567/WORDS", "root", "1234");
+
+                // 사용자로부터 입력 받기
+                Scanner scanner = new Scanner(System.in);
+                System.out.print("수정할 팀 번호를 입력하세요: ");
+                int teamNumToUpdate = scanner.nextInt();
+
+                System.out.print("새로운 팀 이름을 입력하세요: ");
+                String updatedTeamName = scanner.next();
+
+                System.out.print("새로운 감독 이름을 입력하세요: ");
+                String updatedCoachName = scanner.next();
+
+                System.out.print("새로운 지역을 입력하세요: ");
+                String updatedRegion = scanner.next();
+
+                System.out.print("새로운 시드 번호를 입력하세요: ");
+                int updatedSeedNum = scanner.nextInt();
+
+                // SQL 쿼리 작성
+                String updateQuery = "UPDATE TEAMS SET teamname = ?, headcoachname = ?, region = ?, seednum = ? WHERE teamnum = ?";
+                PreparedStatement preparedStatement = conn.prepareStatement(updateQuery);
+                preparedStatement.setString(1, updatedTeamName);
+                preparedStatement.setString(2, updatedCoachName);
+                preparedStatement.setString(3, updatedRegion);
+                preparedStatement.setInt(4, updatedSeedNum);
+                preparedStatement.setInt(5, teamNumToUpdate);
+
+                // 쿼리 실행
+                int rowsAffected = preparedStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    System.out.println("팀 정보가 업데이트되었습니다.");
+                } else {
+                    System.out.println("해당 팀 번호를 찾을 수 없습니다.");
+                }
+
+                // 연결 종료
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    static class UpdatePlayerInfo
+    {
+        public UpdatePlayerInfo()
+        {
+            try {
+
+                Connection conn = DriverManager.getConnection("jdbc:mysql://192.168.56.102:4567/WORDS", "root", "1234");
+
+                Scanner scanner = new Scanner(System.in);
+                System.out.print("수정할 선수 번호를 입력하세요: ");
+                int playerNumToUpdate = scanner.nextInt();
+
+                System.out.print("새로운 선수 닉네임을 입력하세요: ");
+                String updatedPlayerName = scanner.next();
+
+                System.out.print("새로운 포지션을 입력하세요: ");
+                String updatedPosition = scanner.next();
+
+                System.out.print("새로운 국적을 입력하세요: ");
+                String updatedNationality = scanner.next();
+
+                System.out.print("새로운 팀 번호를 입력하세요: ");
+                int updatedTeamNum = scanner.nextInt();
+
+                // SQL 쿼리 작성
+                String updateQuery = "UPDATE PLAYERS SET nickname = ?,  position = ?, nationality = ?, teamnum = ? WHERE playerid = ?";
+                PreparedStatement preparedStatement = conn.prepareStatement(updateQuery);
+                preparedStatement.setString(1, updatedPlayerName);
+                preparedStatement.setString(2, updatedPosition);
+                preparedStatement.setString(3, updatedNationality);
+                preparedStatement.setInt(4, updatedTeamNum);
+                preparedStatement.setInt(5, playerNumToUpdate);
+
+                // 쿼리 실행
+                int rowsAffected = preparedStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    System.out.println("선수 정보가 업데이트되었습니다.");
+                } else {
+                    System.out.println("해당 선수 번호를 찾을 수 없습니다.");
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    static class UpdateChampionInfo
+    {
+        public UpdateChampionInfo()
+        {
+            try {
+                // MySQL 연결
+                Connection conn = DriverManager.getConnection("jdbc:mysql://192.168.56.102:4567/WORDS", "root", "1234");
+
+                // 사용자로부터 입력 받기
+                Scanner scanner = new Scanner(System.in);
+                System.out.print("수정할 챔피언 번호를 입력하세요: ");
+                int championNumToUpdate = scanner.nextInt();
+
+                System.out.print("새로운 챔피언 이름을 입력하세요: ");
+                String updatedChampionName = scanner.next();
+
+                System.out.print("새로운 포지션을 입력하세요: ");
+                String updatedPosition = scanner.next();
+
+                System.out.print("새로운 티어를 입력하세요: ");
+                String updatedTier = scanner.next();
+
+                System.out.print("새로운 카운터 챔피언 번호를 입력하세요: ");
+                int updatedCounterChampionNum = scanner.nextInt();
+
+                System.out.print("새로운 상대하기 쉬운 챔피언 번호를 입력하세요: ");
+                int updatedEasyChampionNum = scanner.nextInt();
+
+                // SQL 쿼리 작성
+                String updateQuery = "UPDATE CHAMPION SET championname = ?, position = ?, tier = ?, counterid = ?, easierid = ? WHERE championid = ?";
+                PreparedStatement preparedStatement = conn.prepareStatement(updateQuery);
+                preparedStatement.setString(1, updatedChampionName);
+                preparedStatement.setString(2, updatedPosition);
+                preparedStatement.setString(3, updatedTier);
+                preparedStatement.setInt(4, updatedCounterChampionNum);
+                preparedStatement.setInt(5, updatedEasyChampionNum);
+                preparedStatement.setInt(6, championNumToUpdate);
+
+                // 쿼리 실행
+                int rowsAffected = preparedStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    System.out.println("챔피언 정보가 업데이트되었습니다.");
+                } else {
+                    System.out.println("해당 챔피언 번호를 찾을 수 없습니다.");
+                }
+
+                // 연결 종료
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

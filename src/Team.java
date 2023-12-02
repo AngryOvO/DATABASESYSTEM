@@ -345,13 +345,15 @@ public class Team {
 
     String[] TEAMS = {GEN, T1, KT, DK, JDG, BLG, LNG, WBG, G2, FNC, MAD, BDS, NRG, C9, TL, GAM};
     String[] TEAM_VAL = {"GEN", "T1", "KT", "DK", "JDG", "BLG", "LNG", "WBG", "G2", "FNC", "MAD", "BDS", "NRG", "C9", "TL", "GAM"};
+
+
     public void printTeam(int i)
     {
         System.out.println(TEAMS[i]);
     }
 
     public String getTEAM_VAL(int i) {
-        return TEAM_VAL[i];
+        return TEAM_VAL[i-1];
     }
 
     public void printDK() {
